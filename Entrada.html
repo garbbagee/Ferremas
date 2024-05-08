@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FERREMAS</title>  
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/styleindex.css">   
+    <link rel="stylesheet" href="styleentrada.css">   
 </head>
 <body>
     <div class="overlay">
         <h1 class="text">FERREMAS</h1>
         <h1 class="text2">Distribuidora de Productos <br />
-            de Ferretería y Construcción</h1>
+            Ferretería y Construcción</h1>
     </div>
 
     <div class="container">
@@ -49,33 +49,33 @@
             document.getElementById("registerForm").style.display = "block";
         }
 
-
         function register() {
-    var firstName = document.getElementById("firstName").value;
-    var lastName = document.getElementById("lastName").value;
-    var email = document.getElementById("email").value;
-    var password = document.getElementById("password").value;
-    var errorMsg = document.getElementById("error-msg");
+            var firstName = document.getElementById("firstName").value;
+            var lastName = document.getElementById("lastName").value;
+            var email = document.getElementById("email").value;
+            var password = document.getElementById("password").value;
+            var errorMsg = document.getElementById("error-msg");
 
-    // Regular expression to validate password
-    var passwordRegex = /^(?=.*[A-Z])(?=.*[@#$!¡])[A-Za-z\d@$!¡#]{8,}$/;
+            // Regular expression to validate password
+            var passwordRegex = /^(?=.*[A-Z])(?=.*[@#$!¡])[A-Za-z\d@$!¡#]{8,}$/;
 
-    // Validate email format (as before)
+            // Validate email format (as before)
 
-    // Validate password format (as before)
+            // Validate password format (as before)
 
-    // Save registration to localStorage
-    var user = {
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        password: password
-    };
-    localStorage.setItem("user", JSON.stringify(user));
+            // Save registration to localStorage
+            var user = {
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                password: password
+            };
+            localStorage.setItem("user", JSON.stringify(user));
 
-    alert("Registro exitoso!");
-}
-function login() {
+            alert("Registro exitoso!");
+        }
+
+        function login() {
             var email = document.getElementById("loginEmail").value;
             var password = document.getElementById("loginPassword").value;
 
@@ -89,12 +89,13 @@ function login() {
             if (credentials[email] && credentials[email] === password) {
                 // Redirigir al usuario a la página correspondiente según su rol
                 if (email === "ADMIN1") {
-                    window.location.href = "bodeguero.html";
+                    // Redirigir al bodeguero al inicio
+                    window.location.href = "IndexBodeguero.html";
                 } else if (email === "ADMIN2") {
-                    window.location.href = "contador.html";
+                    window.location.href = "IndexContador.html";
                 }
             } else {
-                alert("Correo o contraseña invalida. Intente nuevamente.");
+                alert("Correo o contraseña inválida. Intente nuevamente.");
             }
         }
     </script>

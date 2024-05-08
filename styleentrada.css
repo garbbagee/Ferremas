@@ -1,5 +1,5 @@
 body {
-    background-image: url('../img/imagenindex.jpg');
+    background-image: url('../FERREMAS/img/ImagenesEntrada.png');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -14,7 +14,7 @@ body {
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
 .text2 {
-    color: rgb(236, 236, 236); /* Color del texto */
+    color: rgb(12, 12, 12); /* Color del texto */
     font-size: 30px; /* Tamaño de la fuente */
     font-family:cursive;
 }

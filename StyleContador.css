@@ -1,0 +1,10 @@
+body {
+    background-image: url('../FERREMAS/img/Productos-de-ferreteria.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}   
