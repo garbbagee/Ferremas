@@ -1,0 +1,18 @@
+.container {
+    width: 100%;
+  }
+
+  .btn-beige {
+    background-color: #f5f0dc; /* Color */
+    border-color: #000000; /* Borde */
+    color: #000000; /* Color de texto */
+    padding: 4px 8px; /* Ajuste el relleno del botón */
+    font-size: 10px; /* Ajuste el tamaño del texto del botón */
+  }
+  
+  .btn-beige:hover {
+    background-color: #6e5911; /* Color beige más oscuro al pasar el mouse */
+    border-color: #2e2e2e; /* Borde del mismo color al pasar el mouse */
+    color: #000000; /* Color de texto */
+  }
+   
