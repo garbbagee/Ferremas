@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <title>Ferremas - Tu ferretería online</title>
+</head>
+
+<body>
+
+
+    <!-- Cabeza de página -->
+    <header>
+        <span class="logo"><img src="{% static 'img/logisimo.png' %}" alt="Logo de Ferremas" href="#"></span>
+    </header>
+    <nav class="navbar">
+        <ul class="nav-links">
+            <li class="nav-item"><a href="{% url 'index' %}" class="nav-link">Inicio</a></li>
+            <li class="nav-item"><a href="#" class="nav-link">Contacto</a></li>
+        </ul>
+        <div class="login-cart">
+            {% if user.is_authenticated %}
+            <span class="login-btn">Hola, {{ user.username }}</span>
+            <!-- Formulario de cerrar sesión -->
+            <form method="post" action="{% url 'logout' %}" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="logout-button">Cerrar sesión</button>
+            </form>
+            {% else %}
+            <a href="{% url 'inise' %}" class="login-btn">Iniciar sesión</a>
+            <a href="{% url 'formularioRegistro' %}" class="login-btn">Registrar</a>
+            {% endif %}
+            <a href="{% url 'compras' %}" class="cart-btn"><img src="{% static 'img/carro.png' %}"
+                    alt="Carrito de compras"></a>
+        </div>
+    </nav>
+    <!-- fin cabeza de página -->
+
+    <main>
+        <h1 class="titulo_productos">Productos Disponibles</h1>
+        <div class="productos-container">
+            {% for producto in productos %}
+            <div class="producto-card">
+                <h2>{{ producto.nombre }}</h2>
+                <img src="{{ producto.imagen.url }}" alt="Imagen de {{ producto.nombre }}" style="width:100%; max-width:300px;">
+                <p>{{ producto.descripcion }}</p>
+                <p>Precio: ${{ producto.precio }}</p>
+                <button data-url="{% url 'agregar-al-carro' producto.id %}">Agregar al Carro</button>
+            
+            </div>
+            {% empty %}
+            <p>No hay productos disponibles.</p>
+            {% endfor %}
+        </div>
+    </main>
+    <script src="{% static 'js/script.js' %}"></script>
+    <script src="{% static 'js/agregarAlcarro.js' %}"></script>
+    
+</body>
+
+</html>

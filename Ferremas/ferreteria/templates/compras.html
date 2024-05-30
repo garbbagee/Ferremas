@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <title>Ferremas - Tu ferretería online</title>
+</head>
+<body>
+    
+    
+    <!-- Cabeza de página -->
+    <header>
+        <span class="logo"><img src="{% static 'img/logisimo.png' %}" alt="Logo de Ferremas" href="#"></span>
+    </header>
+    <nav class="navbar">
+        <ul class="nav-links">
+            <li class="nav-item"><a href="{% url 'index' %}" class="nav-link">Inicio</a></li>
+            <li class="nav-item"><a href="#" class="nav-link">Contacto</a></li>
+        </ul>
+        <div class="login-cart">
+            {% if user.is_authenticated %}
+                <span class="login-btn">Hola, {{ user.username }}</span>
+                <!-- Formulario de cerrar sesión -->
+                <form method="post" action="{% url 'logout' %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-button">Cerrar sesión</button>
+                </form>
+            {% else %}
+                <a href="{% url 'inise' %}" class="login-btn">Iniciar sesión</a>
+                <a href="{% url 'formularioRegistro' %}" class="login-btn">Registrar</a>
+            {% endif %}
+        </div>
+
+
+    </nav>
+    <!-- fin cabeza de página -->
+
+    <!-- Sección del carro de compras -->
+    <div class="shopping-cart">
+        <h2>Tu Carro de Compras</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unitario</th>
+                    <th>Subtotal</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ item.producto.nombre }}</td>
+                    <td><input type="number" value="{{ item.cantidad }}" min="1"></td>
+                    <td>${{ item.producto.precio }}</td>
+                    <td>${{ item.subtotal }}</td>
+                    <td>
+                        <form action="{% url 'eliminar-del-carro' item.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="remove-btn">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="total">
+            <span>Total: ${{ total }}</span>
+            <button class="checkout-btn">Proceder al Pago</button>
+        </div>
+    </div>
+
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>
+

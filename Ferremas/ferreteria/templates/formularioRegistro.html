@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>Ferremas - Tu ferretería online</title>
+</head>
+<body>
+
+<header>
+    <span class="logo"><img src="{% static 'img/logisimo.png' %}" alt="Logo de Ferremas"></span>
+</header>
+<nav class="navbar">
+    <ul class="nav-links">
+        <li class="nav-item"><a href="{% url 'index' %}" class="nav-link">Inicio</a></li>
+        <li class="nav-item"><a href="#" class="nav-link">Contacto</a></li>
+    </ul>
+    <div class="login-cart">
+        <a href="{% url 'inise' %}" class="login-btn">Inicio de sesión</a>
+        <a href="{% url 'compras' %}" class="cart-btn"><img src="{% static 'img/carro.png' %}" alt="Carrito de compras"></a>
+    </div>
+</nav>
+
+<div class="form-container">
+    <h2>Registro de Cliente</h2>
+    <form method="POST" action="{% url 'formularioRegistro' %}">
+        {% csrf_token %}
+        <div class="form-field">
+            {{ form.username.label_tag }}
+            {{ form.username }}
+        </div>
+        <div class="form-field">
+            {{ form.email.label_tag }}
+            {{ form.email }}
+        </div>
+        <div class="form-field">
+            {{ form.password1.label_tag }}
+            {{ form.password1 }}
+        </div>
+        <div class="form-field">
+            {{ form.password2.label_tag }}
+            {{ form.password2 }}
+        </div>
+        <input type="submit" value="Registrarse">
+    </form>
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
+
+<script src="{% static 'js/script.js' %}"></script>
+
+</body>
+</html>
