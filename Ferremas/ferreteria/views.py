@@ -10,6 +10,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse
 
+from paypalrestsdk import Payment
+import paypalrestsdk
 
 
 
@@ -71,6 +73,7 @@ def vista_bod(request):
 
 
 
+
 @login_required
 def compras(request):
     items = CarroItem.objects.filter(usuario=request.user)  # Asume que 'CarroItem' tiene una relación con 'User'
@@ -112,3 +115,63 @@ def eliminar_del_carro(request, item_id):
     except CarroItem.DoesNotExist:
         messages.error(request, "El producto no se encontró en tu carro.")
     return redirect('compras')
+
+
+
+def vista_paypal(request):
+    return render(request, 'vista_paypal.html')
+
+def create_payment(request):
+    if request.method == "POST":
+        payment = Payment({
+            "intent": "sale",
+            "payer": {
+                "payment_method": "paypal"
+            },
+            "redirect_urls": {
+                "return_url": request.build_absolute_uri(reverse('payment_execute')),
+                "cancel_url": request.build_absolute_uri(reverse('payment_cancel')),
+            },
+            "transactions": [{
+                "item_list": {
+                    "items": [{
+                        "name": "Item",
+                        "sku": "item",
+                        "price": "1.00",
+                        "currency": "USD",
+                        "quantity": 1
+                    }]
+                },
+                "amount": {
+                    "total": "1.00",
+                    "currency": "USD"
+                },
+                "description": "This is the payment transaction description."
+            }]
+        })
+
+        if payment.create():
+            for link in payment.links:
+                if link.rel == "approval_url":
+                    approval_url = link.href
+                    return redirect(approval_url)
+        else:
+            print(payment.error)
+
+    return render(request, 'pago.html')
+
+def execute_payment(request):
+    payment_id = request.GET.get('paymentId')
+    payer_id = request.GET.get('PayerID')
+
+    payment = Payment.find(payment_id)
+
+    if payment.execute({"payer_id": payer_id}):
+        print("Payment execute successfully")
+        return render(request, 'payment_success.html')
+    else:
+        print(payment.error)
+        return render(request, 'payment_error.html')
+
+def payment_cancel(request):
+    return render(request, 'payment_cancel.html')

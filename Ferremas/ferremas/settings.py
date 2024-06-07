@@ -142,3 +142,7 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+PAYPAL_CLIENT_ID = 'AacMtfuvWzZYWvUcalXVAY6lt98uEhSpa1qO13ciol1iU1WiN86UhmbjUVRjqwNF8BGv4bPO1dXAQcO8'
+PAYPAL_CLIENT_SECRET = 'ENoC9gtpydlqa8siYgnCnKUnMnRmvQ5uloCUCbylsKqt5AB-quqUCwPd6ONULtG70ndaQrmROcCZyz9_'
+PAYPAL_ENVIRONMENT = 'sandbox'
