@@ -1,22 +1,23 @@
-DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
     {% load static %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <title>Ferremas - Tu ferretería online</title>
 </head>
 <body>
 
-<!-- cabeza de pagina  -->
-    <header> <span class="logo"><img src="{% static 'img/logisimo.png' %}" alt="" href=></span></header>
+<!-- Cabeza de página -->
+    <header>
+        <span class="logo">
+            <img src="{% static 'img/logisimo.png' %}" alt="">
+        </span>
+    </header>
     <nav class="navbar">
         <ul class="nav-links">
             <li class="nav-item"><a href="{% url 'index' %}" class="nav-link">Inicio</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">Productos</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">Categorías</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">Ofertas</a></li>
             <li class="nav-item"><a href="#" class="nav-link">Contacto</a></li>
         </ul>
         <div class="login-cart">
@@ -25,13 +26,15 @@ DOCTYPE html>
             <a href="{% url 'compras' %}" class="cart-btn"><img src="{% static 'img/carro.png' %}" alt=""></a>
         </div>
     </nav>
-<!-- fin cabeza de pagina -->
-   
-<div class="contenido-i"> 
-    <h2>hola bodeguero</h2>
+<!-- Fin cabeza de página -->
 
+<h1>Agregar Producto</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Agregar</button>
+</form>
 
-</div>
- <script src="{% static 'js/script.js' %}"></script>
+<script src="{% static 'js/script.js' %}"></script>
 </body>
 </html>

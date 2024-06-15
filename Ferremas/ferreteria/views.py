@@ -14,7 +14,7 @@ from django.urls import reverse
 
 
 def index(request):
-    productos = Producto.objects.all()  # Obtener todos los productos
+    productos = Producto.objects.using('productos_db').all()  # Obtener todos los productos desde productos_db
     print(productos)  # Esto imprimirá la lista de productos en la consola donde se está ejecutando tu servidor
     return render(request, 'index.html', {'productos': productos})
 
@@ -112,3 +112,36 @@ def eliminar_del_carro(request, item_id):
     except CarroItem.DoesNotExist:
         messages.error(request, "El producto no se encontró en tu carro.")
     return redirect('compras')
+
+from django.shortcuts import render
+from .models import Producto
+
+def listar_productos(request):
+    productos = Producto.objects.using('productos_db').all()
+    return render(request, 'productos/listar_productos.html', {'productos': productos})
+
+
+from django.shortcuts import render, redirect
+from .forms import ProductoForm
+
+
+def vista_bod(request):
+    if request.method == 'POST':
+        form = ProductoForm(request.POST, request.FILES)
+        if form.is_valid():
+            # Crear una instancia del modelo Producto sin guardarla aún en la base de datos
+            nuevo_producto = form.save(commit=False)
+            # Guardar la instancia del producto en la base de datos 'productos_db'
+            nuevo_producto.save(using='productos_db')
+            return redirect('vista_bod')  # Redirige a la misma vista o a otra que prefieras
+    else:
+        form = ProductoForm()
+
+    # Aquí puedes agregar más lógica si necesitas mostrar más información en la plantilla
+    context = {
+        'form': form,
+        # Otros contextos que quieras pasar a la plantilla
+    }
+    return render(request, 'vista_bod.html', context)
+
+

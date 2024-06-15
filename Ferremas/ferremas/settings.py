@@ -91,9 +91,19 @@ WSGI_APPLICATION = 'ferremas.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',  # Base de datos predeterminada para usuarios
+    },
+    'productos_db': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'ferremasp',
+        'USER': 'root',
+        'PASSWORD': '',  # La contraseña que configuraste para MySQL
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
+
+DATABASE_ROUTERS = ['ferreteria.db_routers.ProductosRouter']
 
 
 # Password validation
