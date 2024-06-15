@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from .models import Cliente, Bodeguero, Contador, Producto
 
 
+admin.site.register(Producto)
+
 class ClienteAdmin(admin.ModelAdmin):
     list_display = ('get_nombre', 'get_email', 'user_is_active')
     search_fields = ('user__username', 'user__email')
@@ -58,11 +60,11 @@ class ContadorAdmin(admin.ModelAdmin):
 
 admin.site.register(Contador, ContadorAdmin)
 
-@admin.register(Producto)
-class ProductoAdmin(admin.ModelAdmin):
-    list_display = ('nombre', 'precio', 'cantidad', 'imagen')
-    list_editable = ('precio', 'cantidad')
-    fields = ['nombre', 'descripcion', 'precio', 'cantidad', 'imagen']
+##@admin.register(Producto)
+##class ProductoAdmin(admin.ModelAdmin):
+  ##  list_display = ('nombre', 'precio', 'cantidad', 'imagen')
+    ##list_editable = ('precio', 'cantidad')
+    ##fields = ['nombre', 'descripcion', 'precio', 'cantidad', 'imagen']
 
     
 

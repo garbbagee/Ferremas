@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.db.models.fields import CharField
 
 class Cliente(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='cliente')
