@@ -1,18 +1,129 @@
 <!DOCTYPE html>
 <html lang="es">
-    {% load static %}
+{% load static %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <title>Ferremas - Tu ferretería online</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #f8f8f8;
+            padding: 10px 0;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .logo img {
+            max-width: 150px;
+        }
+        .navbar {
+            background-color: #333;
+            overflow: hidden;
+        }
+        .nav-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+        .nav-item {
+            margin: 0 15px;
+        }
+        .nav-link {
+            color: #fff;
+            text-decoration: none;
+            padding: 14px 20px;
+            display: block;
+        }
+        .nav-link:hover {
+            background-color: #575757;
+        }
+        .login-cart {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 0;
+        }
+        .login-btn, .cart-btn {
+            margin: 0 10px;
+            color: #333;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .cart-btn img {
+            max-width: 30px;
+        }
+        .custom-font {
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+        }
+        form {
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        form p {
+            margin: 10px 0;
+        }
+        button[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button[type="submit"]:hover {
+            background-color: #575757;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input, 
+        .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .form-group.inline {
+            display: flex;
+            justify-content: space-between;
+        }
+        .form-group.inline .form-group {
+            flex: 1;
+            margin-right: 10px;
+        }
+        .form-group.inline .form-group:last-child {
+            margin-right: 0;
+        }
+    </style>
 </head>
 <body>
 
 <!-- Cabeza de página -->
     <header>
         <span class="logo">
-            <img src="{% static 'img/logisimo.png' %}" alt="">
+            <img src="{% static 'img/logisimo.png' %}" alt="Logo de Ferremas">
         </span>
     </header>
     <nav class="navbar">
@@ -23,15 +134,36 @@
         <div class="login-cart">
             <a href="{% url 'inise' %}" class="login-btn">Inicio de sesión</a>
             <a href="{% url 'formularioRegistro' %}" class="login-btn">Registrar</a>
-            <a href="{% url 'compras' %}" class="cart-btn"><img src="{% static 'img/carro.png' %}" alt=""></a>
+            <a href="{% url 'compras' %}" class="cart-btn"><img src="{% static 'img/carro.png' %}" alt="Carrito"></a>
         </div>
     </nav>
 <!-- Fin cabeza de página -->
 
-<h1>Agregar Producto</h1>
+<h1 class="custom-font">Agregar Producto</h1>
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form.as_p }}
+    <div class="form-group">
+        <label for="nombre">Nombre:</label>
+        {{ form.nombre }}
+    </div>
+    <div class="form-group">
+        <label for="descripcion">Descripción:</label>
+        {{ form.descripcion }}
+    </div>
+    <div class="form-group inline">
+        <div class="form-group">
+            <label for="precio">Precio:</label>
+            {{ form.precio }}
+        </div>
+        <div class="form-group">
+            <label for="cantidad">Cantidad:</label>
+            {{ form.cantidad }}
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="imagen">Imagen:</label>
+        {{ form.imagen }}
+    </div>
     <button type="submit">Agregar</button>
 </form>
 
