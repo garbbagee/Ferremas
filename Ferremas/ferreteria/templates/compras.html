@@ -9,8 +9,6 @@
     <title>Ferremas - Tu ferretería online</title>
 </head>
 <body>
-    
-    
     <!-- Cabeza de página -->
     <header>
         <span class="logo"><img src="{% static 'img/logisimo.png' %}" alt="Logo de Ferremas" href="#"></span>
@@ -33,8 +31,6 @@
                 <a href="{% url 'formularioRegistro' %}" class="login-btn">Registrar</a>
             {% endif %}
         </div>
-
-
     </nav>
     <!-- fin cabeza de página -->
 
@@ -59,7 +55,7 @@
                     <td>${{ item.producto.precio }}</td>
                     <td>${{ item.subtotal }}</td>
                     <td>
-                        <form action="{% url 'eliminar-del-carro' item.id %}" method="post">
+                        <form action="{% url 'eliminar_del_carro' item.id %}" method="post">
                             {% csrf_token %}
                             <button type="submit" class="remove-btn">Eliminar</button>
                         </form>

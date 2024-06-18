@@ -70,40 +70,32 @@ def formularioRegistro(request):
 
 @login_required
 def compras(request):
-    items = CarroItem.objects.filter(usuario=request.user)  # Asume que 'CarroItem' tiene una relación con 'User'
-    total = sum(item.producto.precio * item.cantidad for item in items)  # Calcula el total basándote en los ítems
-
-    context = {
-        'items': items,
-        'total': total
-    }
-    return render(request, 'compras.html', context)
-
-@login_required
-def compras(request):
-    items = CarroItem.objects.filter(usuario=request.user)
+    user_id = request.user.id
+    items = CarroItem.objects.using('productos_db').filter(usuario_id=user_id)
     total = sum(item.subtotal for item in items)
     return render(request, 'compras.html', {'items': items, 'total': total})
 
 
-
+@login_required
 def agregar_al_carro(request, producto_id):
-    producto = get_object_or_404(Producto, id=producto_id)
-    carro_item, created = CarroItem.objects.get_or_create(
-        usuario=request.user, 
+    producto = get_object_or_404(Producto.objects.using('productos_db'), id=producto_id)
+    user_id = request.user.id  # Obtén el ID del usuario de la base de datos predeterminada
+    
+    # Crear el CarroItem sin asignar el usuario directamente
+    carro_item, created = CarroItem.objects.using('productos_db').get_or_create(
+        usuario_id=user_id,
         producto=producto,
         defaults={'cantidad': 1}
     )
     if not created:
         carro_item.cantidad += 1
-        carro_item.save()
+        carro_item.save(using='productos_db')
     return redirect('compras')
-
 
 @login_required
 def eliminar_del_carro(request, item_id):
     try:
-        item = CarroItem.objects.get(id=item_id, usuario=request.user)
+        item = CarroItem.objects.using('productos_db').get(id=item_id, usuario_id=request.user.id)
         item.delete()
         messages.success(request, "Producto eliminado del carro.")
     except CarroItem.DoesNotExist:

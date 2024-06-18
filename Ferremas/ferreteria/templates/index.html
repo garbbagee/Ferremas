@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="es">
 {% load static %}
@@ -10,8 +12,6 @@
 </head>
 
 <body>
-
-
     <!-- Cabeza de página -->
     <header>
         <span class="logo"><img src="{% static 'img/logisimo.png' %}" alt="Logo de Ferremas" href="#"></span>
@@ -34,8 +34,7 @@
             <a href="{% url 'inise' %}" class="login-btn">Iniciar sesión</a>
             <a href="{% url 'formularioRegistro' %}" class="login-btn">Registrar</a>
             {% endif %}
-            <a href="{% url 'compras' %}" class="cart-btn"><img src="{% static 'img/carro.png' %}"
-                    alt="Carrito de compras"></a>
+            <a href="{% url 'compras' %}" class="cart-btn"><img src="{% static 'img/carro.png' %}" alt="Carrito de compras"></a>
         </div>
     </nav>
     <!-- fin cabeza de página -->
@@ -46,11 +45,17 @@
             {% for producto in productos %}
             <div class="producto-card">
                 <h2>{{ producto.nombre }}</h2>
+                {% if producto.imagen %}
                 <img src="{{ producto.imagen.url }}" alt="Imagen de {{ producto.nombre }}" style="width:100%; max-width:300px;">
+                {% else %}
+                <img src="{% static 'img/placeholder.png' %}" alt="Imagen no disponible" style="width:100%; max-width:300px;">
+                {% endif %}
                 <p>{{ producto.descripcion }}</p>
                 <p>Precio: ${{ producto.precio }}</p>
-                <button data-url="{% url 'agregar-al-carro' producto.id %}">Agregar al Carro</button>
-            
+                <form action="{% url 'agregar_al_carro' producto.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit">Agregar al Carro</button>
+                </form>
             </div>
             {% empty %}
             <p>No hay productos disponibles.</p>
@@ -59,7 +64,5 @@
     </main>
     <script src="{% static 'js/script.js' %}"></script>
     <script src="{% static 'js/agregarAlcarro.js' %}"></script>
-    
 </body>
-
 </html>

@@ -26,7 +26,7 @@ class Producto(models.Model):
         return self.nombre
 
 class CarroItem(models.Model):
-    usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='carro_items')
+    usuario_id = models.IntegerField(null=True, blank=True)
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     cantidad = models.PositiveIntegerField(default=1)
 
