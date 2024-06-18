@@ -1,0 +1,56 @@
+<!-- pago.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagar con PayPal</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+</head>
+<body>
+    <header>
+        <h1>Pagar con PayPal</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="{% url 'index' %}">Inicio</a></li>
+            <li><a href="{% url 'compras' %}">Carro de Compras</a></li>
+        </ul>
+    </nav>
+    <main>
+        <section class="payment-section">
+            <h2>Resumen del Pago</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td>{{ item.producto.nombre }}</td>
+                        <td>{{ item.cantidad }}</td>
+                        <td>${{ item.producto.precio }}</td>
+                        <td>${{ item.producto.precio|floatformat:2|mul:item.cantidad }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="total">
+                <span>Total: ${{ total|floatformat:2 }}</span>
+            </div>
+            <form action="{% url 'create_payment' %}" method="post">
+                {% csrf_token %}
+                <button type="submit">Proceder al Pago con PayPal</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Ferremas - Tu ferretería online</p>
+    </footer>
+</body>
+</html>

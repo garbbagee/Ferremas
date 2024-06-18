@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <title>Pago Exitoso</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+</head>
+<body>
+    <header>
+        <h1>Pago Exitoso</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="{% url 'index' %}">Inicio</a></li>
+            <li><a href="{% url 'compras' %}">Carro de Compras</a></li>
+        </ul>
+    </nav>
+    <main>
+        <section class="success-section">
+            <h2>¡Gracias por tu compra!</h2>
+            <p>Tu pago ha sido procesado exitosamente.</p>
+            <p>Un correo electrónico de confirmación ha sido enviado a tu dirección de correo.</p>
+            <a href="{% url 'index' %}">Volver a la página de inicio</a>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Ferremas - Tu ferretería online</p>
+    </footer>
+</body>
+</html>

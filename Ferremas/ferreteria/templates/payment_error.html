@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error en el Pago</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+</head>
+<body>
+    <header>
+        <h1>Error en el Pago</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="{% url 'index' %}">Inicio</a></li>
+            <li><a href="{% url 'compras' %}">Carro de Compras</a></li>
+        </ul>
+    </nav>
+    <main>
+        <section class="error-section">
+            <h2>Hubo un problema con tu pago</h2>
+            <p>Lo sentimos, no pudimos procesar tu pago. Por favor, intenta nuevamente.</p>
+            <a href="{% url 'compras' %}">Volver al Carro de Compras</a>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Ferremas - Tu ferretería online</p>
+    </footer>
+</body>
+</html>

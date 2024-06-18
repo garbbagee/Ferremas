@@ -9,6 +9,8 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse
+from .paypal import paypalrestsdk
+
 
 #from paypalrestsdk import Payment
 #import paypalrestsdk
@@ -103,60 +105,121 @@ def eliminar_del_carro(request, item_id):
     return redirect('compras')
 
 
-"""
 def vista_paypal(request):
     return render(request, 'vista_paypal.html')
-"""
 
-""""
+
+
+
+@login_required
 def create_payment(request):
-    if request.method == "POST":
-        payment = Payment({
-            "intent": "sale",
-            "payer": {
-                "payment_method": "paypal"
-            },
-            "redirect_urls": {
-                "return_url": request.build_absolute_uri(reverse('payment_execute')),
-                "cancel_url": request.build_absolute_uri(reverse('payment_cancel')),
-            },
-            "transactions": [{
-                "item_list": {
-                    "items": [{
-                        "name": "Item",
-                        "sku": "item",
-                        "price": "1.00",
-                        "currency": "USD",
-                        "quantity": 1
-                    }]
-                },
-                "amount": {
-                    "total": "1.00",
-                    "currency": "USD"
-                },
-                "description": "This is the payment transaction description."
-            }]
-        })
+    user_id = request.user.id
+    items = CarroItem.objects.using('productos_db').filter(usuario_id=user_id)
 
-        if payment.create():
-            for link in payment.links:
-                if link.rel == "approval_url":
-                    approval_url = link.href
-                    return redirect(approval_url)
-        else:
-            print(payment.error)
+    if not items:
+        messages.error(request, "Tu carro está vacío.")
+        return redirect('compras')
 
-    return render(request, 'pago.html')
-"""
-"""
+    total = sum(item.producto.precio * item.cantidad for item in items)
+    transaction_items = [{
+        "name": item.producto.nombre,
+        "sku": str(item.producto.id),
+        "price": str(item.producto.precio),
+        "currency": "USD",
+        "quantity": item.cantidad
+    } for item in items]
+
+    payment = paypalrestsdk.Payment({
+        "intent": "sale",
+        "payer": {
+            "payment_method": "paypal"
+        },
+        "redirect_urls": {
+            "return_url": request.build_absolute_uri(reverse('execute_payment')),
+            "cancel_url": request.build_absolute_uri(reverse('payment_cancel')),
+        },
+        "transactions": [{
+            "item_list": {
+                "items": transaction_items
+            },
+            "amount": {
+                "total": str(total),
+                "currency": "USD"
+            },
+            "description": "Compra en Ferremas"
+        }]
+    })
+
+    if payment.create():
+        for link in payment.links:
+            if link.rel == "approval_url":
+                approval_url = link.href
+                return redirect(approval_url)
+    else:
+        print(payment.error)
+        messages.error(request, "Error al crear el pago con PayPal.")
+        return redirect('compras')
+
+@login_required
+def create_payment(request):
+    user_id = request.user.id
+    items = CarroItem.objects.using('productos_db').filter(usuario_id=user_id)
+
+    if not items:
+        messages.error(request, "Tu carro está vacío.")
+        return redirect('compras')
+
+    total = sum(item.producto.precio * item.cantidad for item in items)
+    transaction_items = [{
+        "name": item.producto.nombre,
+        "sku": str(item.producto.id),
+        "price": str(item.producto.precio),
+        "currency": "USD",
+        "quantity": item.cantidad
+    } for item in items]
+
+    payment = paypalrestsdk.Payment({
+        "intent": "sale",
+        "payer": {
+            "payment_method": "paypal"
+        },
+        "redirect_urls": {
+            "return_url": request.build_absolute_uri(reverse('execute_payment')),
+            "cancel_url": request.build_absolute_uri(reverse('payment_cancel')),
+        },
+        "transactions": [{
+            "item_list": {
+                "items": transaction_items
+            },
+            "amount": {
+                "total": str(total),
+                "currency": "USD"
+            },
+            "description": "Compra en Ferremas"
+        }]
+    })
+
+    if payment.create():
+        for link in payment.links:
+            if link.rel == "approval_url":
+                approval_url = link.href
+                return redirect(approval_url)
+    else:
+        print(payment.error)
+        messages.error(request, "Error al crear el pago con PayPal.")
+        return redirect('compras')
+
+@login_required
 def execute_payment(request):
     payment_id = request.GET.get('paymentId')
     payer_id = request.GET.get('PayerID')
 
-    payment = Payment.find(payment_id)
+    payment = paypalrestsdk.Payment.find(payment_id)
 
     if payment.execute({"payer_id": payer_id}):
-        print("Payment execute successfully")
+        print("Payment executed successfully")
+        # Aquí puedes vaciar el carro del usuario o registrar el pago en tu base de datos
+        CarroItem.objects.using('productos_db').filter(usuario_id=request.user.id).delete()
         return render(request, 'payment_success.html')
     else:
         print(payment.error)
@@ -165,7 +228,14 @@ def execute_payment(request):
 def payment_cancel(request):
     return render(request, 'payment_cancel.html')
 
-"""
+
+
+
+
+
+
+
+
 from django.shortcuts import render
 from .models import Producto
 
@@ -195,3 +265,4 @@ def vista_bod(request):
         # Otros contextos que quieras pasar a la plantilla
     }
     return render(request, 'vista_bod.html', context)
+
