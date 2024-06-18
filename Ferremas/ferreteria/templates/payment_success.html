@@ -6,17 +6,143 @@
     {% load static %}
     <title>Pago Exitoso</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .logo {
+            display: inline-block;
+            margin: 10px 0;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #ffffff;
+            padding: 10px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .nav-links .nav-item {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        .nav-links .nav-item .nav-link {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .nav-links .nav-item .nav-link:hover {
+            color: #4CAF50;
+        }
+
+        .login-cart {
+            display: flex;
+            align-items: center;
+        }
+
+        .login-btn {
+            margin-right: 20px;
+            color: #333;
+        }
+
+        .logout-button, .login-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .logout-button:hover, .login-btn:hover {
+            background-color: #45a049;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .success-section h2 {
+            color: #4CAF50;
+        }
+
+        .success-section p {
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .success-section a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        .success-section a:hover {
+            background-color: #45a049;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #f4f4f4;
+            color: #333;
+            position: relative;
+            width: 100%;
+            bottom: 0;
+        }
+    </style>
 </head>
 <body>
+    <!-- Cabeza de página -->
     <header>
-        <h1>Pago Exitoso</h1>
+        <span class="logo"><img src="{% static 'img/logisimo.png' %}" alt="Logo de Ferremas" href="#"></span>
     </header>
-    <nav>
-        <ul>
-            <li><a href="{% url 'index' %}">Inicio</a></li>
-            <li><a href="{% url 'compras' %}">Carro de Compras</a></li>
+    <nav class="navbar">
+        <ul class="nav-links">
+            <li class="nav-item"><a href="{% url 'index' %}" class="nav-link">Inicio</a></li>
+            <li class="nav-item"><a href="#" class="nav-link">Contacto</a></li>
         </ul>
+        <div class="login-cart">
+            {% if user.is_authenticated %}
+                <span class="login-btn">Hola, {{ user.username }}</span>
+                <!-- Formulario de cerrar sesión -->
+                <form method="post" action="{% url 'logout' %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-button">Cerrar sesión</button>
+                </form>
+            {% else %}
+                <a href="{% url 'inise' %}" class="login-btn">Iniciar sesión</a>
+                <a href="{% url 'formularioRegistro' %}" class="login-btn">Registrar</a>
+            {% endif %}
+        </div>
     </nav>
+
+    <!-- Contenido -->
     <main>
         <section class="success-section">
             <h2>¡Gracias por tu compra!</h2>
@@ -25,6 +151,8 @@
             <a href="{% url 'index' %}">Volver a la página de inicio</a>
         </section>
     </main>
+    
+    <!-- Pie de página -->
     <footer>
         <p>&copy; 2024 Ferremas - Tu ferretería online</p>
     </footer>
