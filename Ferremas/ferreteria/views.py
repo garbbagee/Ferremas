@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from .forms import ClienteForm
@@ -10,7 +11,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse
 from .paypal import paypalrestsdk
-
+import json
+import requests
 
 #from paypalrestsdk import Payment
 #import paypalrestsdk
@@ -19,7 +21,23 @@ from .paypal import paypalrestsdk
 
 def index(request):
     productos = Producto.objects.using('productos_db').all()  # Obtener todos los productos desde productos_db
-    print(productos)  # Esto imprimirá la lista de productos en la consola donde se está ejecutando tu servidor
+
+    url = f'https://mindicador.cl/api'
+    response = requests.get(url)
+    data = json.loads(response.text)
+
+    uf = Decimal(str(data['uf']['valor']))
+    utm = Decimal(str(data['utm']['valor']))
+    usd = Decimal(str(data['dolar']['valor']))
+    eur = Decimal(str(data['euro']['valor']))
+
+    for producto in productos:
+        producto.valor_uf = round((producto.precio/uf),3)
+        producto.valor_utm = round((producto.precio/utm),3)
+        producto.valor_usd = round((producto.precio/usd),3)
+        producto.valor_eur = round((producto.precio/eur),3)
+
+    #print(productos)  # Esto imprimirá la lista de productos en la consola donde se está ejecutando tu servidor
     return render(request, 'index.html', {'productos': productos})
 
 def inise(request):
@@ -240,11 +258,14 @@ from django.shortcuts import render
 from .models import Producto
 
 def listar_productos(request):
-    productos = Producto.objects.using('productos_db').all()
+    productos = Producto.objects.using('productos_db').all() 
     return render(request, 'productos/listar_productos.html', {'productos': productos})
 
 from django.shortcuts import render, redirect
 from .forms import ProductoForm
+
+
+
 
 
 def vista_bod(request):
